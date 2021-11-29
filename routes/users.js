@@ -29,7 +29,7 @@ router.put(
 	[
 		validationJWT,
 		check("name", "El nombre es obligatorio").not().isEmpty(),
-		check("role", "El rol  es obligatorio").not().isEmpty(),
+		check("role", "El rol es obligatorio").not().isEmpty(),
 		check("email", "El email  es obligatorio").not().isEmpty().isEmail(),
 		validationFields,
 	],
