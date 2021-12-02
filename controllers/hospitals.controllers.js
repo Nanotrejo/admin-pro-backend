@@ -23,8 +23,7 @@ const createHospital = async (req, res = response) => {
 	});
 
 	try {
-		const hospitalExists = await Hospital.findOne({ name: name });
-
+		const hospitalExists = await Hospital.findOne({ name: hospital.name });
 		if (hospitalExists) {
 			return res.status(400).json({ ok: false, msg: "The name hospitals already exists." });
 		}
@@ -37,17 +36,47 @@ const createHospital = async (req, res = response) => {
 	}
 };
 
-const updateHospital = (req, res = response) => {
-	res.json({
-		ok: true,
-		msg: "update",
-	});
+const updateHospital = async (req, res = response) => {
+	const id = req.params.id;
+	const uid = req.uid;
+
+	try {
+		const hospital = await Hospital.findById(id);
+
+		if (!hospital) {
+			res.status(404).json({ ok: false, msg: "No se encuentra el hospital" });
+		}
+
+		const changeHospital = { ...req.body, user: uid };
+
+		const updateHosp = await Hospital.findByIdAndUpdate(id, changeHospital, { new: true });
+		res.json({
+			ok: true,
+			updateHosp,
+		});
+	} catch (error) {
+		res.status(500).json({ ok: false, msg: "Error interno" });
+	}
 };
-const deleteHospital = (req, res = response) => {
-	res.json({
-		ok: true,
-		msg: "delete",
-	});
+const deleteHospital = async (req, res = response) => {
+	const id = req.params.id;
+
+	try {
+		const hospital = await Hospital.findById(id);
+
+		if (!hospital) {
+			res.status(404).json({ ok: false, msg: "No se encuentra el hospital" });
+		}
+
+		await Hospital.findByIdAndDelete(id);
+
+		res.json({
+			ok: true,
+			msg: "Hospital eliminado",
+		});
+	} catch (error) {
+		res.status(500).json({ ok: false, msg: "Error interno" });
+	}
 };
 
 module.exports = {

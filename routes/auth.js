@@ -2,11 +2,12 @@
     PATH: /api/auth
 */
 
-const { login, googleSignIn } = require("../controllers/login.controllers");
+const { login, googleSignIn, renewToken } = require("../controllers/login.controllers");
 
 const { Router } = require("express");
 const { check } = require("express-validator");
 const { validationFields } = require("../middlewares/validation fields");
+const { validationJWT } = require("../middlewares/validation-jwt");
 
 const router = Router();
 
@@ -24,5 +25,7 @@ router.post(
 	[check("token", "El token de Google es obligatorio").not().isEmpty(), validationFields],
 	googleSignIn
 );
+
+router.get("/renew", validationJWT, renewToken);
 
 module.exports = router;
