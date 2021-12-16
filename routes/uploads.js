@@ -16,6 +16,6 @@ router.use(expressFileUpload());
 
 router.put("/:type/:id", validationJWT, fileUpload);
 
-router.get("/:type/:photo", validationJWT, getPhoto);
+router.get("/:type/:photo", getPhoto);
 
 module.exports = router;

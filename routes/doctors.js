@@ -9,7 +9,13 @@ const { validationFields } = require("../middlewares/validation fields");
 const { validationJWT } = require("../middlewares/validation-jwt");
 const router = Router();
 
-const { getDoctors, createDoctor, updateDoctor, deleteDoctor } = require("../controllers/doctors.controllers");
+const {
+	getDoctors,
+	createDoctor,
+	updateDoctor,
+	deleteDoctor,
+	getDoctorById,
+} = require("../controllers/doctors.controllers");
 
 router.get("/", validationJWT, getDoctors);
 
@@ -36,5 +42,7 @@ router.put(
 );
 
 router.delete("/:id", [validationJWT], deleteDoctor);
+
+router.get("/:id", [validationJWT], getDoctorById);
 
 module.exports = router;

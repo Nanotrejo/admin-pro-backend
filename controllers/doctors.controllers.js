@@ -8,7 +8,7 @@ const getDoctors = async (req, res = response) => {
 		res.json(200, { ok: true, doctor: doctors });
 	} catch (err) {
 		res.status(500).json({
-			ok: true,
+			ok: false,
 			msg: "Error interno!",
 		});
 	}
@@ -75,9 +75,25 @@ const deleteDoctor = async (req, res = response) => {
 	}
 };
 
+const getDoctorById = async (req, res = response) => {
+	const id = req.params.id;
+
+	try {
+		const doctors = await Doctor.findById(id).populate("user", "name").populate("hospital", "name");
+
+		res.json(200, { ok: true, doctor: doctors });
+	} catch (err) {
+		res.status(500).json({
+			ok: false,
+			msg: "Error interno!",
+		});
+	}
+};
+
 module.exports = {
 	getDoctors,
 	createDoctor,
 	updateDoctor,
 	deleteDoctor,
+	getDoctorById,
 };

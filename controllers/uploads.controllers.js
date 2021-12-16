@@ -19,7 +19,7 @@ const fileUpload = async (req, res = response) => {
 		return res.status(400).json({ ok: false, msg: "No hay ningún archivo." });
 	}
 
-	const file = req.files.image;
+	const file = req.files.imagen;
 
 	const nameReduce = file.name.split(".");
 	const extensionFile = nameReduce[nameReduce.length - 1];
