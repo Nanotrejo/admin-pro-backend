@@ -3,6 +3,7 @@ const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const { generateJWT } = require("../helpers/jwt");
 const { googleVerify } = require("../helpers/google-verify");
+const { getMenuFrontEnd } = require("../helpers/menu-frontend");
 
 const login = async (req, res = response) => {
 	const { email, password } = req.body;
@@ -25,7 +26,7 @@ const login = async (req, res = response) => {
 
 		const token = await generateJWT(userDB.id, userDB.name);
 
-		res.json({ ok: true, token });
+		res.json({ ok: true, token, menu: getMenuFrontEnd(userDB.role) });
 	} catch (e) {
 		res.status(500).json({ ok: false, msg: "Internal Error" });
 	}
@@ -61,6 +62,7 @@ const googleSignIn = async (req, res) => {
 		res.json(200, {
 			ok: true,
 			token,
+			menu: getMenuFrontEnd(user.role),
 		});
 	} catch (error) {
 		res.json(401, {
@@ -76,6 +78,6 @@ const renewToken = async (req, res = response) => {
 	const token = await generateJWT(uid);
 	const user = await User.findById(uid);
 
-	res.json({ ok: true, token, user });
+	res.json({ ok: true, token, user, menu: getMenuFrontEnd(user.role) });
 };
 module.exports = { login, googleSignIn, renewToken };
